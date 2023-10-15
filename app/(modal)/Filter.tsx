@@ -10,6 +10,7 @@ import React from "react";
 import Colors from "../../constants/Colors";
 import { useNavigation } from "expo-router";
 import filter from "../../assets/data/filter.json";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Filter {
   name: string;
@@ -17,16 +18,48 @@ interface Filter {
   checked?: boolean;
 }
 
+const ItemBox = () => (
+  <>
+    <View style={styles.ItemContainer}>
+      <TouchableOpacity style={styles.item}>
+        <Ionicons name="arrow-down" size={20} color={Colors.medium} />
+        <Text style={{ flex: 1 }}>Sort</Text>
+        <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item}>
+        <Ionicons name="fast-food-outline" size={20} color={Colors.medium} />
+        <Text style={{ flex: 1 }}>Hygiene Rating</Text>
+        <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item}>
+        <Ionicons name="nutrition-outline" size={20} color={Colors.medium} />
+        <Text style={{ flex: 1 }}>Offers</Text>
+        <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item}>
+        <Ionicons name="pricetag" size={20} color={Colors.medium} />
+        <Text style={{ flex: 1 }}>Dietary</Text>
+        <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
+      </TouchableOpacity>
+    </View>
+    <Text style={styles.header}>Cartegories</Text>
+  </>
+);
+
 export default function Filter() {
   const navigation = useNavigation();
   const renderItem: ListRenderItem<Filter> = ({ item }) => (
-    <View>
+    <View style={styles.row}>
       <Text>{item.name}</Text>
     </View>
   );
   return (
     <View style={styles.container}>
-      <FlatList data={filter} renderItem={renderItem} />
+      <FlatList
+        data={filter}
+        renderItem={renderItem}
+        ListHeaderComponent={<ItemBox />}
+      />
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.fullButton}
@@ -69,5 +102,31 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  ItemContainer: {
+    backgroundColor: "#fff",
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  header: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  item: {
+    flexDirection: "row",
+    gap: 20,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingVertical: 16,
+    borderColor: Colors.grey,
+    borderBottomWidth: 1,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#fff",
   },
 });
