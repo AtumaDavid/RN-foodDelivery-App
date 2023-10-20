@@ -1,3 +1,4 @@
+// Filter modal
 import { Stack, useNavigation } from "expo-router";
 import CustomHeader from "../Components/CustomHeader";
 import Colors from "../constants/Colors";
@@ -21,7 +22,7 @@ export default function RootLayoutNav() {
           options={{ header: () => <CustomHeader /> }}
         />
         <Stack.Screen
-          name="(modal)/Filter"
+          name="(modal)/Filter" //connecting to the Fiter.tsx
           options={{
             presentation: "modal",
             headerTitle: "Filter",

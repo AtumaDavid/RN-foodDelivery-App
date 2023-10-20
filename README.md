@@ -1,5 +1,9 @@
 **React Native Food Deleivery Application**
 
+**Dependencies**
+
+- Bouncy Checkbox `npm i react-native-bouncy-checkbox` (https://www.npmjs.com/package/react-native-bouncy-checkbox)
+
 **Bottom sheet**
 
 - For the bottom sheet, visit `https://github.com/gorhom/react-native-bottom-sheet`

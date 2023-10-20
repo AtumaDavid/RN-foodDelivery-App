@@ -5,14 +5,19 @@ import {
   TouchableOpacity,
   FlatList,
   ListRenderItem,
+  Button,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
 import { useNavigation } from "expo-router";
 import filter from "../../assets/data/filter.json";
 import { Ionicons } from "@expo/vector-icons";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
-interface Filter {
+// import { categories } from "../../assets/data/home";
+
+interface CategoryFilter {
   name: string;
   count: number;
   checked?: boolean;
@@ -48,25 +53,93 @@ const ItemBox = () => (
 
 export default function Filter() {
   const navigation = useNavigation();
-  const renderItem: ListRenderItem<Filter> = ({ item }) => (
+  const [Categoryitems, setCategoryItems] = useState<CategoryFilter[]>(filter);
+  const [SelectedCategories, setSelectedCategories] = useState<
+    CategoryFilter[]
+  >([]);
+  const flexWidth = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: flexWidth.value,
+    };
+  });
+
+  useEffect(() => {
+    const hasSelected = SelectedCategories.length > 0;
+    const selectedItems = Categoryitems.filter((item) => item.checked);
+    {
+      /*We have a big list of things called "Categoryitems."
+     We want to make a new list, which we call "selectedItems."
+     In the new list, we only want to put the things (items) that have a special mark called "checked" set to "true."*/
+    }
+    const newSelected = selectedItems.length > 0;
+    // newSelected checks whether there are newly selected items by evaluating if the length of selectedItems is greater than 0.
+
+    if (hasSelected !== newSelected) {
+      console.log("Has changed");
+      // A condition that checks if hasSelected and newSelected values are not the same. If they're different, it logs "Has changed."
+    }
+  }, [Categoryitems]);
+
+  const handleClearAll = () => {
+    const updatedCategoryItems = Categoryitems.map((item) => {
+      item.checked = false;
+
+      return item;
+    });
+    setCategoryItems(updatedCategoryItems);
+  };
+
+  const renderItem: ListRenderItem<CategoryFilter> = ({ item, index }) => (
     <View style={styles.row}>
-      <Text>{item.name}</Text>
+      <Text style={styles.itemText}>
+        {item.name} ({item.count})
+      </Text>
+      <BouncyCheckbox
+        size={25}
+        fillColor={Colors.primary}
+        unfillColor="#FFFFFF"
+        iconStyle={{ borderColor: "#20e1b2" }}
+        innerIconStyle={{ borderWidth: 2 }}
+        disableBuiltInState
+        onPress={() => {
+          const isChecked = Categoryitems[index].checked;
+          const updatedItems = Categoryitems.map((item) => {
+            if (item.name === Categoryitems[index].name) {
+              item.checked = !isChecked;
+            }
+            return item;
+          });
+          setCategoryItems(updatedItems);
+        }}
+        isChecked={Categoryitems[index].checked}
+      />
     </View>
   );
   return (
     <View style={styles.container}>
+      {/* <Button title="clear all" onPress={handleClearAll} /> */}
       <FlatList
-        data={filter}
+        // data={filter}
+        data={Categoryitems}
         renderItem={renderItem}
         ListHeaderComponent={<ItemBox />}
       />
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.fullButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.footerText}>Done</Text>
-        </TouchableOpacity>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity
+            style={styles.outlineButton}
+            onPress={handleClearAll}
+          >
+            <Text style={styles.outlineButtonText}>Clear all</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.fullButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.footerText}>Done</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -123,10 +196,30 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     borderBottomWidth: 1,
   },
+  itemText: {
+    flex: 1,
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
     backgroundColor: "#fff",
+  },
+  btnContainer: {
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "center",
+  },
+  outlineButtonText: {
+    color: Colors.primary,
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  outlineButton: {
+    borderColor: Colors.primary,
+    borderWidth: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
   },
 });
