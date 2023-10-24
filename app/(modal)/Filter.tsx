@@ -6,6 +6,7 @@ import {
   FlatList,
   ListRenderItem,
   Button,
+  Animated,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
@@ -58,11 +59,11 @@ export default function Filter() {
     CategoryFilter[]
   >([]);
   const flexWidth = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      width: flexWidth.value,
-    };
-  });
+  // const animatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     width: flexWidth.value,
+  //   };
+  // });
 
   useEffect(() => {
     const hasSelected = SelectedCategories.length > 0;
@@ -78,9 +79,12 @@ export default function Filter() {
     if (hasSelected !== newSelected) {
       console.log("Has changed");
       // A condition that checks if hasSelected and newSelected values are not the same. If they're different, it logs "Has changed."
+      // flexWidth.value = newSelected ? 150 : 0;
     }
+    setSelectedCategories(selectedItems);
   }, [Categoryitems]);
 
+  //clear all
   const handleClearAll = () => {
     const updatedCategoryItems = Categoryitems.map((item) => {
       item.checked = false;
@@ -127,12 +131,15 @@ export default function Filter() {
       />
       <View style={styles.footer}>
         <View style={styles.btnContainer}>
+          {/* <Animated.View style={[animatedStyle, styles.outlineButton]}> */}
           <TouchableOpacity
             style={styles.outlineButton}
             onPress={handleClearAll}
           >
             <Text style={styles.outlineButtonText}>Clear all</Text>
           </TouchableOpacity>
+          {/* </Animated.View> */}
+
           <TouchableOpacity
             style={styles.fullButton}
             onPress={() => navigation.goBack()}
