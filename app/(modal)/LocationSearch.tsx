@@ -16,7 +16,7 @@ export default function LocationSearch() {
       <GooglePlacesAutocomplete
         placeholder="Search"
         query={{
-          key: "AIzaSyBm9mexyzS7MwjWnqkv6QUmetdmfgMYw1E",
+          key: process.env.EXPO_PUBLIC_GOOGLE_API_KEY,
           language: "en",
         }}
         onPress={(data, details = null) => {
